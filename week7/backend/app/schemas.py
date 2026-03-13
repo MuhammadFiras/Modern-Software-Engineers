@@ -1,11 +1,11 @@
 from datetime import datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class NoteCreate(BaseModel):
-    title: str
-    content: str
+    title: str = Field(min_length=1, max_length=255)
+    content: str = Field(min_length=1, max_length=255)
 
 
 class NoteRead(BaseModel):
@@ -16,13 +16,12 @@ class NoteRead(BaseModel):
     updated_at: datetime
     tags: list["TagRead"] = []
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class NotePatch(BaseModel):
-    title: str | None = None
-    content: str | None = None
+    title: str | None = Field(None, min_length=1, max_length=255)
+    content: str | None = Field(None, min_length=1, max_length=255)
 
 
 class TagCreate(BaseModel):
@@ -38,7 +37,7 @@ class TagRead(BaseModel):
 
 
 class ActionItemCreate(BaseModel):
-    description: str
+    description: str = Field(min_length=1, max_length=255)
 
 
 class ActionItemRead(BaseModel):
@@ -48,12 +47,11 @@ class ActionItemRead(BaseModel):
     created_at: datetime
     updated_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class ActionItemPatch(BaseModel):
-    description: str | None = None
+    description: str | None = Field(None, min_length=1, max_length=255)
     completed: bool | None = None
 
 
