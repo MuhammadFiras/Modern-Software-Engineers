@@ -21,44 +21,44 @@ a. Links to relevant commits/issues
 > TODO
 
 b. PR Description
-> TODO
+> Menambahkan *endpoint* `DELETE` untuk fitur Notes dan Action Items beserta *error handling* (404 Not Found). Menambahkan juga Pydantic `Field` validation (`min_length=1`) untuk memastikan *input* tidak boleh berupa teks kosong.
 
 c. Graphite Diamond generated code review
-> TODO
+> MAI memberikan ringkasan yang bagus tentang implementasi status code `204 No Content`, namun gagal menyadari bahwa penambahan `max_length` mematahkan file *test* yang sudah ada.
 
 ## Task 2: Extend extraction logic
 a. Links to relevant commits/issues
 > TODO
 
 b. PR Description
-> TODO
+> Memperbarui logika ekstraksi di `services/extract.py` dengan *regex* tingkat lanjut untuk mengenali awalan seperti `TODO:`, `ACTION:`, `TASK:`, dan *markdown checkboxes* (`- [ ]`, `* [ ]`).
 
 c. Graphite Diamond generated code review
-> TODO
+> AI dengan tepat memuji penggunaan Regex yang lebih efisien dan *clean architecture* yang dipertahankan. (Disubmit otomatis menggunakan Graphite CLI `gt submit`).
 
 ## Task 3: Try adding a new model and relationships
 a. Links to relevant commits/issues
 > TODO
 
 b. PR Description
-> TODO
+> Menambahkan model `Tag` baru pada *database* yang memiliki relasi *Many-to-Many* dengan model `Note` menggunakan tabel asosiasi. Menambahkan operasi dasar CRUD untuk Tag dan mengintegrasikannya ke *schema* dan *router* yang ada.
 
 c. Graphite Diamond generated code review
-> TODO
+> AI mampu menganalisis pembuatan tabel asosiasi SQLAlchemy dan validasi Pydantic untuk *nested models* (daftar Tag di dalam Note).
 
 ## Task 4: Improve tests for pagination and sorting
 a. Links to relevant commits/issues
 > TODO
 
 b. PR Description
-> TODO
+> Menambahkan fungsi pengujian ekstensif di `tests/test_notes.py` dan `tests/test_action_items.py` untuk memvalidasi fitur *pagination* (`skip`, `limit`) dan *sorting* (`sort=title`, `sort=-created_at`).
 
 c. Graphite Diamond generated code review
-> TODO
+> AI mengapresiasi peningkatan *test coverage* dan memvalidasi penggunaan *FastAPI TestClient* yang tepat.
 
 ## Brief Reflection 
 a. The types of comments you typically made in your manual reviews (e.g., correctness, performance, security, naming, test gaps, API shape, UX, docs).
-> TODO 
+> Dalam *manual review* yang saya lakukan, saya cenderung fokus pada **Correctness** dan **Test Gaps**. Contohnya, saya sangat memperhatikan apakah aturan validasi Pydantic yang dibuat AI tidak merusak data uji (*test data*) yang sudah ada di *codebase*, serta memastikan nama *field* sinkron antara *schema* Pydantic dan model SQLAlchemy. 
 
 b. A comparison of **your** comments vs. **Graphite’s** AI-generated comments for each PR.
 > TODO
