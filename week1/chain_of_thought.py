@@ -8,8 +8,10 @@ load_dotenv()
 NUM_RUNS_TIMES = 5
 
 # TODO: Fill this in!
-YOUR_SYSTEM_PROMPT = ""
-
+YOUR_SYSTEM_PROMPT = """
+You are an expert mathematician. You must solve the user's math problem by thinking STEP BY STEP 
+and showing your work. At the end, provide the final answer on its own line in the format "Answer: <number>".
+"""
 
 USER_PROMPT = """
 Solve this problem, then give the final answer on the last line as "Answer: <number>".

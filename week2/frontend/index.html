@@ -24,7 +24,11 @@
     <div class="row">
       <label class="row"><input id="save_note" type="checkbox" checked /> Save as note</label>
       <button id="extract">Extract</button>
+      <button id="extract-llm-btn" onclick="extractActionItemsLLM()">Extract LLM</button>
+      <button id="list-notes-btn" onclick="listNotes()">List Notes</button>
     </div>
+
+    <div id="notes-list-container" style="margin-top: 20px;"></div>
 
     <div class="items" id="items"></div>
 
@@ -66,6 +70,69 @@
           itemsEl.textContent = 'Error extracting items';
         }
       });
+
+      // Fungsi untuk tombol Extract LLM (Sudah Diperbaiki)
+      async function extractActionItemsLLM() {
+          const text = document.getElementById("text").value; // FIX: Menggunakan ID yang benar "text"
+          if (!text.trim()) return alert("Teks tidak boleh kosong!");
+
+          const itemsEl = document.getElementById('items');
+          itemsEl.textContent = 'Extracting with LLM...'; // Indikator loading
+
+          try {
+              const response = await fetch("/action-items/extract-llm", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ text: text, save_note: true })
+              });
+              
+              if (!response.ok) throw new Error('Request failed');
+              const data = await response.json();
+              
+              if (!data.items || data.items.length === 0) {
+                  itemsEl.innerHTML = '<p class="muted">No action items found.</p>';
+                  return;
+              }
+              
+              // FIX: Render hasilnya ke dalam bentuk list dan checkbox persis seperti kode asli
+              itemsEl.innerHTML = data.items.map(it => (
+                  `<div class="item"><input type="checkbox" data-id="${it.id}" /> <span>${it.text}</span></div>`
+              )).join('');
+              
+              // Tambahkan event listener agar checkbox-nya bisa diklik (Mark as Done)
+              itemsEl.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                  cb.addEventListener('change', async (e) => {
+                      const id = e.target.getAttribute('data-id');
+                      await fetch(`/action-items/${id}/done`, {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ done: e.target.checked }),
+                      });
+                  });
+              });
+          } catch (err) {
+              console.error(err);
+              itemsEl.textContent = 'Error extracting items with LLM';
+          }
+      }
+
+      // Fungsi untuk tombol List Notes (Sudah Diperbaiki)
+      async function listNotes() {
+          try {
+              // FIX: Menggunakan /notes/ dengan garis miring di akhir agar tidak bentrok (405)
+              const response = await fetch("/notes/"); 
+              if (!response.ok) throw new Error('Request failed');
+              const notes = await response.json();
+              
+              const container = document.getElementById("notes-list-container");
+              container.innerHTML = "<h3>Saved Notes:</h3><ul>" + 
+                  notes.map(n => `<li>${n.content} (ID: ${n.id})</li>`).join("") + 
+                  "</ul>";
+          } catch (err) {
+              console.error("Error fetching notes:", err);
+              alert("Gagal mengambil daftar notes!");
+          }
+      }
 
     </script>
   </body>

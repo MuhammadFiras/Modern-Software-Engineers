@@ -7,7 +7,30 @@ load_dotenv()
 NUM_RUNS_TIMES = 5
 
 # TODO: Fill this in!
-YOUR_SYSTEM_PROMPT = ""
+YOUR_SYSTEM_PROMPT = """
+You are a text processing assistant. Your task is to reverse the letters of a word. 
+You must ONLY output the reversed word and absolutely no other text.
+
+Here are some examples:
+
+Input:
+apple
+
+Output:
+elppa
+
+Input:
+software
+
+Output:
+erawtfos
+
+Input:
+developer
+
+Output:
+repoleved
+"""
 
 USER_PROMPT = """
 Reverse the order of letters in the following word. Only output the reversed word, no other text:

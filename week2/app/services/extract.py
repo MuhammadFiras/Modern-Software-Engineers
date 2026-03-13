@@ -65,6 +65,47 @@ def extract_action_items(text: str) -> List[str]:
         unique.append(item)
     return unique
 
+def extract_action_items_llm(text: str) -> List[str]:
+    """
+    Extract action items using an LLM via Ollama.
+    Returns a list of strings representing the extracted tasks.
+    """
+    # Jika teks kosong, langsung kembalikan list kosong
+    if not text.strip():
+        return []
+        
+    system_prompt = """
+    You are an AI assistant that extracts action items, tasks, and to-dos from unstructured notes.
+    You must strictly output a JSON object with a single key "action_items" containing a list of strings.
+    Example output:
+    {"action_items": ["Buy milk", "Call John"]}
+    If there are no action items, output {"action_items": []}.
+    Do NOT include any markdown formatting, conversational text, or explanations. Just the JSON.
+    """
+    
+    try:
+        # Memanggil Ollama menggunakan model llama3.1:8b
+        response = chat(
+            model="llama3.1:8b",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": text}
+            ],
+            format="json",  # Memaksa output berupa JSON valid
+            options={"temperature": 0.0}  # Suhu 0 agar hasilnya konsisten dan tidak berhalusinasi
+        )
+        
+        # Mengubah string JSON dari LLM menjadi dictionary Python
+        result = json.loads(response.message.content)
+        
+        # Mengambil list dari key "action_items"
+        return result.get("action_items", [])
+        
+    except Exception as e:
+        print(f"Error during LLM extraction: {e}")
+        # Kembalikan list kosong jika terjadi error (misal Ollama mati atau JSON gagal diparsing)
+        return []
+
 
 def _looks_imperative(sentence: str) -> bool:
     words = re.findall(r"[A-Za-z']+", sentence)

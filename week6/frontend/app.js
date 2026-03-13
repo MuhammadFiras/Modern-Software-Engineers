@@ -11,7 +11,12 @@ async function loadNotes(params = {}) {
   const notes = await fetchJSON('/notes/?' + query.toString());
   for (const n of notes) {
     const li = document.createElement('li');
-    li.innerHTML = `<strong>${n.title}</strong>: ${n.content}`;
+    // Membuat elemen secara manual untuk mencegah render HTML/Script
+    const strongObj = document.createElement("strong");
+    strongObj.textContent = n.title;
+
+    li.appendChild(strongObj);
+    li.appendChild(document.createTextNode(`: ${n.content}`));
     list.appendChild(li);
   }
 }

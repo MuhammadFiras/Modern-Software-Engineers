@@ -8,14 +8,19 @@ load_dotenv()
 
 NUM_RUNS_TIMES = 1
 
-SYSTEM_PROMPT = """
-You are a coding assistant. Output ONLY a single fenced Python code block that defines
-the function is_valid_password(password: str) -> bool. No prose or comments.
-Keep the implementation minimal.
-"""
+SYSTEM_PROMPT = """ 
+You are a coding assistant. Output ONLY a single fenced Python code block that defines 
+the function is_valid_password(password: str) -> bool. No prose or comments. 
+Keep the implementation minimal. 
+""" 
 
 # TODO: Fill this in!
-YOUR_REFLEXION_PROMPT = ""
+YOUR_REFLEXION_PROMPT = """
+You are an expert Python coding assistant. Your previous code failed some test cases.
+Review the previous code and the error messages provided by the user.
+Write a corrected Python function `is_valid_password(password: str) -> bool` that satisfies all the missing requirements (e.g., length, uppercase, lowercase, digits, special characters, no whitespace).
+Output ONLY a single fenced Python code block. No prose, no explanations.
+"""
 
 
 # Ground-truth test suite used to evaluate generated code
@@ -96,7 +101,12 @@ def your_build_reflexion_context(prev_code: str, failures: List[str]) -> str:
 
     Return a string that will be sent as the user content alongside the reflexion system prompt.
     """
-    return ""
+    failures_text = "\n".join(f"- {f}" for f in failures)
+    return (
+        f"Here is the previous code I generated:\n```python\n{prev_code}\n```\n\n"
+        f"When I ran the tests, it failed with these errors:\n{failures_text}\n\n"
+        "Please fix the code so it passes all these checks."
+    )
 
 
 def apply_reflexion(

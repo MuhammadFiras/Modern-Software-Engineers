@@ -70,7 +70,19 @@ TOOL_REGISTRY: Dict[str, Callable[..., str]] = {
 # ==========================
 
 # TODO: Fill this in!
-YOUR_SYSTEM_PROMPT = ""
+YOUR_SYSTEM_PROMPT = """
+You are an AI assistant. You have access to a tool named `output_every_func_return_type`. 
+
+When the user asks you to call the tool, you MUST respond ONLY with a valid JSON object that matches this exact format:
+
+{
+    "tool": "output_every_func_return_type",
+    "args": {}
+}
+
+Do not output any other text, explanations, or markdown formatting. Just the raw JSON object.
+
+"""
 
 
 def resolve_path(p: str) -> str:
