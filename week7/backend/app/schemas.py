@@ -14,6 +14,7 @@ class NoteRead(BaseModel):
     content: str
     created_at: datetime
     updated_at: datetime
+    tags: list["TagRead"] = []
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -21,6 +22,18 @@ class NoteRead(BaseModel):
 class NotePatch(BaseModel):
     title: str | None = Field(None, min_length=1, max_length=255)
     content: str | None = Field(None, min_length=1, max_length=255)
+
+
+class TagCreate(BaseModel):
+    name: str
+
+
+class TagRead(BaseModel):
+    id: int
+    name: str
+
+    class Config:
+        from_attributes = True
 
 
 class ActionItemCreate(BaseModel):
