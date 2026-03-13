@@ -14,6 +14,7 @@ class NoteRead(BaseModel):
     content: str
     created_at: datetime
     updated_at: datetime
+    tags: list["TagRead"] = []
 
     class Config:
         from_attributes = True
@@ -22,6 +23,18 @@ class NoteRead(BaseModel):
 class NotePatch(BaseModel):
     title: str | None = None
     content: str | None = None
+
+
+class TagCreate(BaseModel):
+    name: str
+
+
+class TagRead(BaseModel):
+    id: int
+    name: str
+
+    class Config:
+        from_attributes = True
 
 
 class ActionItemCreate(BaseModel):
